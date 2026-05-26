@@ -2,7 +2,6 @@ package backoff
 
 import (
 	"context"
-	"errors"
 	"time"
 )
 
@@ -27,38 +26,21 @@ type retryOptions struct {
 type RetryOption func(*retryOptions)
 
 // WithBackOff configures a custom backoff strategy.
-func WithBackOff(b BackOff) RetryOption {
-	return func(args *retryOptions) {
-		args.BackOff = b
-	}
-}
+func WithBackOff(b BackOff) RetryOption { _ = "STUB: not implemented"; return *new(RetryOption) }
 
 // withTimer sets a custom timer for managing delays between retries.
-func withTimer(t timer) RetryOption {
-	return func(args *retryOptions) {
-		args.Timer = t
-	}
-}
+func withTimer(t timer) RetryOption { _ = "STUB: not implemented"; return *new(RetryOption) }
 
 // WithNotify sets a notification function to handle retry errors.
-func WithNotify(n Notify) RetryOption {
-	return func(args *retryOptions) {
-		args.Notify = n
-	}
-}
+func WithNotify(n Notify) RetryOption { _ = "STUB: not implemented"; return *new(RetryOption) }
 
 // WithMaxTries limits the number of all attempts.
-func WithMaxTries(n uint) RetryOption {
-	return func(args *retryOptions) {
-		args.MaxTries = n
-	}
-}
+func WithMaxTries(n uint) RetryOption { _ = "STUB: not implemented"; return *new(RetryOption) }
 
 // WithMaxElapsedTime limits the total duration for retry attempts.
 func WithMaxElapsedTime(d time.Duration) RetryOption {
-	return func(args *retryOptions) {
-		args.MaxElapsedTime = d
-	}
+	_ = "STUB: not implemented"
+	return *new(RetryOption)
 }
 
 // Retry attempts the operation until success, a permanent error, or backoff completion.
@@ -66,74 +48,27 @@ func WithMaxElapsedTime(d time.Duration) RetryOption {
 //
 // Returns the operation result or error if retries are exhausted or context is cancelled.
 func Retry[T any](ctx context.Context, operation Operation[T], opts ...RetryOption) (T, error) {
+	_ = "STUB: not implemented"
 	// Initialize default retry options.
-	args := &retryOptions{
-		BackOff:        NewExponentialBackOff(),
-		Timer:          &defaultTimer{},
-		MaxElapsedTime: DefaultMaxElapsedTime,
-	}
-
-	// Apply user-provided options to the default settings.
-	for _, opt := range opts {
-		opt(args)
-	}
-
-	defer args.Timer.Stop()
-
-	startedAt := time.Now()
-	args.BackOff.Reset()
-	for numTries := uint(1); ; numTries++ {
-		// Execute the operation.
-		res, err := operation()
-		if err == nil {
-			return res, nil
-		}
-
-		// Handle permanent errors without retrying.
-		var permanent *PermanentError
-		if errors.As(err, &permanent) {
-			return res, permanent.Unwrap()
-		}
-
-		// Stop retrying if maximum tries exceeded.
-		if args.MaxTries > 0 && numTries >= args.MaxTries {
-			return res, err
-		}
-
-		// Stop retrying if context is cancelled.
-		if cerr := context.Cause(ctx); cerr != nil {
-			return res, cerr
-		}
-
-		// Calculate next backoff duration.
-		next := args.BackOff.NextBackOff()
-		if next == Stop {
-			return res, err
-		}
-
-		// Reset backoff if RetryAfterError is encountered.
-		var retryAfter *RetryAfterError
-		if errors.As(err, &retryAfter) {
-			next = retryAfter.Duration
-			args.BackOff.Reset()
-		}
-
-		// Stop retrying if maximum elapsed time exceeded.
-		if args.MaxElapsedTime > 0 && time.Since(startedAt)+next > args.MaxElapsedTime {
-			return res, err
-		}
-
-		// Notify on error if a notifier function is provided.
-		if args.Notify != nil {
-			args.Notify(err, next)
-		}
-
-		// Wait for the next backoff period or context cancellation.
-		args.Timer.Start(next)
-		select {
-		case <-args.Timer.C():
-		case <-ctx.Done():
-			return res, context.Cause(ctx)
-		}
-	}
+	return *new(T), nil
 }
+
+// Apply user-provided options to the default settings.
+
+// Execute the operation.
+
+// Handle permanent errors without retrying.
+
+// Stop retrying if maximum tries exceeded.
+
+// Stop retrying if context is cancelled.
+
+// Calculate next backoff duration.
+
+// Reset backoff if RetryAfterError is encountered.
+
+// Stop retrying if maximum elapsed time exceeded.
+
+// Notify on error if a notifier function is provided.
+
+// Wait for the next backoff period or context cancellation.

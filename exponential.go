@@ -1,7 +1,6 @@
 package backoff
 
 import (
-	"math/rand/v2"
 	"time"
 )
 
@@ -62,57 +61,37 @@ const (
 )
 
 // NewExponentialBackOff creates an instance of ExponentialBackOff using default values.
-func NewExponentialBackOff() *ExponentialBackOff {
-	return &ExponentialBackOff{
-		InitialInterval:     DefaultInitialInterval,
-		RandomizationFactor: DefaultRandomizationFactor,
-		Multiplier:          DefaultMultiplier,
-		MaxInterval:         DefaultMaxInterval,
-	}
-}
+func NewExponentialBackOff() *ExponentialBackOff { _ = "STUB: not implemented"; return nil }
 
 // Reset the interval back to the initial retry interval and restarts the timer.
 // Reset must be called before using b.
-func (b *ExponentialBackOff) Reset() {
-	b.currentInterval = b.InitialInterval
-}
+func (b *ExponentialBackOff) Reset() { _ = "STUB: not implemented"; return }
 
 // NextBackOff calculates the next backoff interval using the formula:
 //
 //	Randomized interval = RetryInterval * (1 ± RandomizationFactor)
 func (b *ExponentialBackOff) NextBackOff() time.Duration {
-	if b.currentInterval == 0 {
-		b.currentInterval = b.InitialInterval
-	}
-
-	next := getRandomValueFromInterval(b.RandomizationFactor, rand.Float64(), b.currentInterval)
-	b.incrementCurrentInterval()
-	return next
+	_ = "STUB: not implemented"
+	return *new(time.Duration)
 }
 
 // Increments the current interval by multiplying it with the multiplier.
 func (b *ExponentialBackOff) incrementCurrentInterval() {
+	_ = "STUB: not implemented"
 	// Check for overflow, if overflow is detected set the current interval to the max interval.
-	if float64(b.currentInterval) >= float64(b.MaxInterval)/b.Multiplier {
-		b.currentInterval = b.MaxInterval
-	} else {
-		b.currentInterval = time.Duration(float64(b.currentInterval) * b.Multiplier)
-	}
+	return
 }
 
 // Returns a random value from the following interval:
 //
 //	[currentInterval - randomizationFactor * currentInterval, currentInterval + randomizationFactor * currentInterval].
 func getRandomValueFromInterval(randomizationFactor, random float64, currentInterval time.Duration) time.Duration {
-	if randomizationFactor == 0 {
-		return currentInterval // make sure no randomness is used when randomizationFactor is 0.
-	}
-	var delta = randomizationFactor * float64(currentInterval)
-	var minInterval = float64(currentInterval) - delta
-	var maxInterval = float64(currentInterval) + delta
-
-	// Get a random value from the range [minInterval, maxInterval].
-	// The formula used below has a +1 because if the minInterval is 1 and the maxInterval is 3 then
-	// we want a 33% chance for selecting either 1, 2 or 3.
-	return time.Duration(minInterval + (random * (maxInterval - minInterval + 1)))
+	_ = "STUB: not implemented"
+	return *new(time.Duration)
 }
+
+// make sure no randomness is used when randomizationFactor is 0.
+
+// Get a random value from the range [minInterval, maxInterval].
+// The formula used below has a +1 because if the minInterval is 1 and the maxInterval is 3 then
+// we want a 33% chance for selecting either 1, 2 or 3.

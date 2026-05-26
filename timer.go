@@ -15,21 +15,13 @@ type defaultTimer struct {
 
 // C returns the timers channel which receives the current time when the timer fires.
 func (t *defaultTimer) C() <-chan time.Time {
-	return t.timer.C
+	_ = "STUB: not implemented"
+
+	// Start starts the timer to fire after the given duration
+	return nil
 }
 
-// Start starts the timer to fire after the given duration
-func (t *defaultTimer) Start(duration time.Duration) {
-	if t.timer == nil {
-		t.timer = time.NewTimer(duration)
-	} else {
-		t.timer.Reset(duration)
-	}
-}
+func (t *defaultTimer) Start(duration time.Duration) { _ = "STUB: not implemented"; return }
 
 // Stop is called when the timer is not used anymore and resources may be freed.
-func (t *defaultTimer) Stop() {
-	if t.timer != nil {
-		t.timer.Stop()
-	}
-}
+func (t *defaultTimer) Stop() { _ = "STUB: not implemented"; return }

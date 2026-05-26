@@ -24,60 +24,15 @@ type Ticker struct {
 // method is called or BackOff stops. It is not safe to manipulate the
 // provided backoff policy (notably calling NextBackOff or Reset)
 // while the ticker is running.
-func NewTicker(b BackOff) *Ticker {
-	c := make(chan time.Time)
-	t := &Ticker{
-		C:     c,
-		c:     c,
-		b:     b,
-		timer: &defaultTimer{},
-		stop:  make(chan struct{}),
-	}
-	t.b.Reset()
-	go t.run()
-	return t
-}
+func NewTicker(b BackOff) *Ticker { _ = "STUB: not implemented"; return nil }
 
 // Stop turns off a ticker. After Stop, no more ticks will be sent.
-func (t *Ticker) Stop() {
-	t.stopOnce.Do(func() { close(t.stop) })
-}
+func (t *Ticker) Stop() { _ = "STUB: not implemented"; return }
 
-func (t *Ticker) run() {
-	c := t.c
-	defer close(c)
+func (t *Ticker) run() { _ = "STUB: not implemented"; return }
 
-	// Ticker is guaranteed to tick at least once.
-	afterC := t.send(time.Now())
+// Ticker is guaranteed to tick at least once.
 
-	for {
-		if afterC == nil {
-			return
-		}
+// Prevent future ticks from being sent to the channel.
 
-		select {
-		case tick := <-afterC:
-			afterC = t.send(tick)
-		case <-t.stop:
-			t.c = nil // Prevent future ticks from being sent to the channel.
-			return
-		}
-	}
-}
-
-func (t *Ticker) send(tick time.Time) <-chan time.Time {
-	select {
-	case t.c <- tick:
-	case <-t.stop:
-		return nil
-	}
-
-	next := t.b.NextBackOff()
-	if next == Stop {
-		t.Stop()
-		return nil
-	}
-
-	t.timer.Start(next)
-	return t.timer.C()
-}
+func (t *Ticker) send(tick time.Time) <-chan time.Time { _ = "STUB: not implemented"; return nil }

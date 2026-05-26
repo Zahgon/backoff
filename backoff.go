@@ -39,28 +39,37 @@ const Stop time.Duration = -1
 // meaning that the operation is retried immediately without waiting, indefinitely.
 type ZeroBackOff struct{}
 
-func (b *ZeroBackOff) Reset() {}
+func (b *ZeroBackOff) Reset() { _ = "STUB: not implemented"; return }
 
-func (b *ZeroBackOff) NextBackOff() time.Duration { return 0 }
+func (b *ZeroBackOff) NextBackOff() time.Duration {
+	_ = "STUB: not implemented"
 
-// StopBackOff is a fixed backoff policy that always returns backoff.Stop for
-// NextBackOff(), meaning that the operation should never be retried.
+	// StopBackOff is a fixed backoff policy that always returns backoff.Stop for
+	// NextBackOff(), meaning that the operation should never be retried.
+	return *new(time.Duration)
+}
+
 type StopBackOff struct{}
 
-func (b *StopBackOff) Reset() {}
+func (b *StopBackOff) Reset() { _ = "STUB: not implemented"; return }
 
-func (b *StopBackOff) NextBackOff() time.Duration { return Stop }
+func (b *StopBackOff) NextBackOff() time.Duration {
+	_ = "STUB: not implemented"
 
-// ConstantBackOff is a backoff policy that always returns the same backoff delay.
-// This is in contrast to an exponential backoff policy,
-// which returns a delay that grows longer as you call NextBackOff() over and over again.
+	// ConstantBackOff is a backoff policy that always returns the same backoff delay.
+	// This is in contrast to an exponential backoff policy,
+	// which returns a delay that grows longer as you call NextBackOff() over and over again.
+	return *new(time.Duration)
+}
+
 type ConstantBackOff struct {
 	Interval time.Duration
 }
 
-func (b *ConstantBackOff) Reset()                     {}
-func (b *ConstantBackOff) NextBackOff() time.Duration { return b.Interval }
-
-func NewConstantBackOff(d time.Duration) *ConstantBackOff {
-	return &ConstantBackOff{Interval: d}
+func (b *ConstantBackOff) Reset() { _ = "STUB: not implemented"; return }
+func (b *ConstantBackOff) NextBackOff() time.Duration {
+	_ = "STUB: not implemented"
+	return *new(time.Duration)
 }
+
+func NewConstantBackOff(d time.Duration) *ConstantBackOff { _ = "STUB: not implemented"; return nil }
